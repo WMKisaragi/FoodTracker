@@ -1,6 +1,6 @@
 # Build a Basic UI
 
-[公式](https://developer.apple.com/library/archive/referencelibrary/GettingStarted/DevelopiOSAppsSwift/BuildABasicUI.html#//apple_ref/doc/uid/TP40015214-CH5-SW1) 
+[公式](https://developer.apple.com/library/archive/referencelibrary/GettingStarted/DevelopiOSAppsSwift/BuildABasicUI.html#//apple_ref/doc/uid/TP40015214-CH5-SW1)
 
 ## 学習目標（チュートリアルに記載されているもの）
 
@@ -26,7 +26,6 @@ Command-Rを押すことで起動可能
 
 [参考サイト①](https://qiita.com/SoyaTakahashi/items/cc8f48af792c353cd9f3)  
 [参考サイト②-はじめてのSwiftアプリ制作1: プロジェクトの作り方-](https://qiita.com/tsubamechi/items/dfdff846ac574297a0e2)
-
 
 プロジェクト>プロジェクトフォルダ>AppDelegate.swift
 
