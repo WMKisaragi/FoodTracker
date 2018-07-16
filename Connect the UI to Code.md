@@ -29,6 +29,7 @@
 [【swift】イラストで分かる！具体的なDelegateの使い方。](https://qiita.com/narukun/items/326bd50a78cf34371169)
 
 #### デリゲートとは
+
 プロトコルを用いてあるクラスの処理を他のクラスのインスタンスに任せるもの
 
 例：  
@@ -44,8 +45,8 @@ UITableViewが保持しているプロトコルのUITableViewDelegateやUITableD
 必要な要素
 
 1. プロトコル
-1. 処理を任せるクラス
-1. 処理を任されるクラス
+2. 処理を任せるクラス
+3. 処理を任されるクラス
 
 例：（UITableViewに当てはめる）
 
@@ -56,16 +57,72 @@ UITableViewが保持しているプロトコルのUITableViewDelegateやUITableD
 #### 今回のデリゲート使用例
 
 1. プロトコル： UITextFieldDelegate
-2. 処理を任せるクラス：UIViewController??
-3. 処理を任されるクラス：???
+2. 処理を任せるクラス：ViewController
+3. 処理を任されるクラス：UITextFeld
 
 #### 使用方法
 
 1. デリゲートを使用するクラスを見つける(今回の場合はViewController.swift > class ViewController: UIViewController)
 2. クラスの「UIViewController」の後ろにカンマ（,)を追加して「UITextFieldDelegate」を入力する．
 
+#### viewDidLoad()
 
-#### viewDidLoad
+[今更だけどiOSアプリでviewDidLoadとかviewWillAppearとかが呼ばれるタイミングをまとめてみる](http://blog.livedoor.jp/sasata299/archives/52029262.html)
 
-次回はここら辺から（チュートリアルとしては「ViewControllerオブジェクトをnameTextFieldプロパティのデリゲートとして設定する」ところから
-）
+viewDidLoadはインスタンス化された直後に実行される（初回の一回のみ）
+
+具体的には...  
+アプリを起動したときに画面Aが表示されるときに一番最初に実行される  
+画面Bに遷移したときにも一番最初に実行される  
+**ここで画面Aに戻っても実行されない**  
+(多分もっと繊細な話だけどイメージ程度ではこんな感じかと思ってる)
+
+### ここで書かれるviewDidLoadのなかみ
+
+ViewController.swiftのviewDidLoadのなかみ
+
+```swift
+override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Handle the text field's user input through delegate callbacks.
+        nameTextField.delegate = self
+    }
+```
+
+ViewControllerインスタンスを読み込んだときにデリゲートを利用してnameiTextFieldプロパティを再帰させる？（なんか違う気がする)
+
+[【Swift】デリゲートを完全攻略する](https://qiita.com/jumpyoshim/items/7667e0cc81ad91016f03)
+
+結局デリゲートは...  
+他のクラスに処理を委譲したり，**通知したり**する仕組み.(通知の概念は初登場？)
+
+```swift
+nameTextField.delegate = self
+```
+
+これを日本語翻訳すると...
+UITextFieldクラスのインスタンスであるnameTextFieldのdelegateプロパティにViewControllerのインスタンスを渡している．  
+になるらしい（厄介）
+
+つまりつまり  
+nameTextFieldでUITextFieldDelegateプロトコルで定義されているメソッドが実行されたらViewController(自分自身=self)に教えてくれ  
+と言っているらしい？
+
+### UITextFieldDelegateプロトコル
+
+8つのメソッドが定義されている
+今回は2つのメソッドを利用する
+
+```swift
+//MARK: UITextFieldDelegate
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // Hide the keyboard/.
+        textField.resignFirstResponder()
+        return true
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        mealNameLabel.text = textField.text
+    }
+```
+※ここら辺もしっかり解読する
